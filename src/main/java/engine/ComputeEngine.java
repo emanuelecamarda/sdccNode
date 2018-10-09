@@ -13,8 +13,6 @@ import java.rmi.server.UnicastRemoteObject;
 
 public class ComputeEngine implements Compute {
 
-    static String postUrl = "http://35.180.140.212:8083/fogMiddleware/node/registration";
-
     public ComputeEngine() {
         super();
     }
@@ -24,6 +22,14 @@ public class ComputeEngine implements Compute {
     }
 
     public static void main(String[] args) throws Exception{
+
+        if (args.length != 1) {
+            System.err.println("Usage: java -Djava.rmi.server.hostname= -Djava.rmi.server.useCodebaseOnly=false -jar " +
+                    "<jarPath> <hostname:port>");
+            System.exit(-1);
+        }
+
+        String postUrl = "http://" + args[0] + "/fogMiddleware/node/registration";
 
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(postUrl);
