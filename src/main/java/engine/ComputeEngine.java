@@ -18,7 +18,10 @@ public class ComputeEngine implements Compute {
     }
 
     public <T> T executeTask(Task<T> t) {
-        return t.execute();
+        System.out.println("Received a new task");
+        T tComplete = t.execute();
+        System.out.println("Completed task\n\nWaiting for a new task...");
+        return tComplete;
     }
 
     public static void main(String[] args) throws Exception{
@@ -49,11 +52,7 @@ public class ComputeEngine implements Compute {
                     (Compute) UnicastRemoteObject.exportObject(engine, 0);
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
-            System.out.println("registry: " + registry.toString());
-            for (String s : registry.list()) {
-                System.out.println(s);
-            }
-            System.out.println("ComputeEngine bound");
+            System.out.println("ComputeEngine bound\nWaiting for task...");
         } catch (Exception e) {
             System.err.println("ComputeEngine exception:");
             e.printStackTrace();
