@@ -26,6 +26,7 @@ public class ComputeEngine implements Compute {
 
     public static void main(String[] args) throws Exception{
 
+        // manage input
         if (args.length != 1) {
             System.err.println("Usage: java -Djava.rmi.server.hostname= -Djava.rmi.server.useCodebaseOnly=false -jar " +
                     "<jarPath> <hostname:port>");
@@ -34,6 +35,7 @@ public class ComputeEngine implements Compute {
 
         String postUrl = "http://" + args[0] + "/fogMiddleware/node/registration";
 
+        // create http request for registration
         CloseableHttpClient httpClient = HttpClientBuilder.create().build();
         HttpPost post = new HttpPost(postUrl);
         HttpResponse response = httpClient.execute(post);
@@ -50,8 +52,10 @@ public class ComputeEngine implements Compute {
             Compute engine = new ComputeEngine();
             Compute stub =
                     (Compute) UnicastRemoteObject.exportObject(engine, 0);
+            // registration of service "Compute" on RmiRegistry
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
+            // waiting...
             System.out.println("ComputeEngine bound\nWaiting for task...");
         } catch (Exception e) {
             System.err.println("ComputeEngine exception:");
