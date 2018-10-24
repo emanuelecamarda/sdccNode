@@ -19,8 +19,10 @@ public class ComputeEngine implements Compute {
 
     public <T> T executeTask(Task<T> t) {
         System.out.println("Received a new task");
+        Long startTime = System.nanoTime()/1000;
         T tComplete = t.execute();
-        System.out.println("Completed task\n\nWaiting for a new task...");
+        System.out.println("Completed task in " + (System.nanoTime()/1000 - startTime) +
+                " micro seconds.\n\nWaiting for a new task...");
         return tComplete;
     }
 
@@ -55,7 +57,7 @@ public class ComputeEngine implements Compute {
             // registration of service "Compute" on RmiRegistry
             Registry registry = LocateRegistry.getRegistry();
             registry.rebind(name, stub);
-            // waiting...
+            // waiting...sudo yum install java-devel
             System.out.println("ComputeEngine bound\nWaiting for task...");
         } catch (Exception e) {
             System.err.println("ComputeEngine exception:");
